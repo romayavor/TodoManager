@@ -1,0 +1,97 @@
+﻿h3 {
+    color: #3a0070;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+input[type="text"], input:not([type="checkbox"]) {
+    border: 2px solid #d0d0d0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    width: 300px;
+}
+
+    input:not([type="checkbox"]):focus {
+        border-color: #3a0070;
+        outline: none;
+    }
+
+button {
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.2s;
+}
+
+    button:hover {
+        opacity: 0.85;
+    }
+
+.btn-add {
+    background-color: #3a0070;
+    color: white;
+    margin-left: 8px;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-edit {
+    background-color: #198754;
+    color: white;
+}
+
+.btn-save {
+    background-color: #0d6efd;
+    color: white;
+    margin-left: 4px;
+}
+
+.btn-cancel {
+    background-color: #6c757d;
+    color: white;
+    margin-left: 4px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+thead {
+    background-color: #3a0070;
+    color: white;
+}
+
+    thead th {
+        padding: 12px 16px;
+        font-weight: 600;
+    }
+
+tbody tr {
+    transition: background-color 0.15s;
+}
+
+    tbody tr:hover {
+        background-color: #f3e8ff;
+    }
+
+tbody td {
+    padding: 10px 16px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.task-done {
+    text-decoration: line-through;
+    color: #999;
+}

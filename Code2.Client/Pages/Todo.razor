@@ -1,0 +1,219 @@
+﻿@page "/todo"
+
+@inject HttpClient Http
+
+<h3>📝 Moje zadania</h3>
+
+<div style="margin-bottom: 20px;">
+
+    <input @bind="newTaskTitle"
+
+           placeholder="Nazwa zadania..."
+
+           style="padding: 8px; width: 300px;" />
+
+    <button @onclick="AddTask" class="btn-add">Dodaj</button>
+ 
+
+</div>
+
+@if (tasks == null)
+
+{
+
+    <p>Pobieranie Danych...</p>
+
+}
+
+else if (!tasks.Any())
+
+{
+
+    <p>Nie Znałeziono Zadań. Dodaj Pierwsze!</p>
+
+}
+
+else
+
+{
+
+    <table style="width: 100%; border-collapse: collapse;">
+
+        <thead>
+
+            <tr>
+
+                <th style="text-align: left; padding: 8px;">Id</th>
+
+                <th style="text-align: left; padding: 8px;">Zadanie</th>
+
+                <th style="text-align: left; padding: 8px;">Wykonane</th>
+
+                <th style="text-align: left; padding: 8px;">Działania</th>
+
+                <th style="text-align: left; padding: 8px;">Działania</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @foreach (var task in tasks)
+
+            {
+
+                <tr style="border-top: 1px solid #ddd;">
+
+                    <td style="padding: 8px;">                       
+
+                            @task.Id                        
+
+                    </td>
+
+                    <td style="padding: 8px;">
+
+                        @if (editingId == task.Id)
+
+                        {
+
+                            <input @bind="editingTitle" style="padding: 4px;" />
+
+                            <button @onclick="() => SaveEdit(task)" class="btn-save">✓</button>
+
+                            <button @onclick="() => editingId = null" class="btn-cancel">✗</button>
+
+                        }
+
+                        else
+
+                        {
+
+                            <span class="@(task.IsCompleted ? "task-done" : "")">
+                                @task.Title
+                            </span>
+
+                        }
+
+                    </td>                 
+
+                    <td style="padding: 8px;">
+
+                        <input type="checkbox"
+
+                               checked="@task.IsCompleted"
+
+                               @onchange="() => ToggleTask(task)" />
+
+                    </td>
+
+                    <td style="padding: 8px;">
+
+                        <button @onclick="() => DeleteTask(task.Id)" class="btn-delete">Usuń</button>
+
+                    </td>
+
+                    <td style="padding: 8px;">
+
+                        <button @onclick="() => StartEdit(task)" class="btn-edit">✏️ Edytuj</button>
+
+                    </td>
+
+                </tr>
+
+            }
+
+        </tbody>
+
+    </table>
+
+}
+
+@code {
+
+    private int? editingId = null;
+
+    private string editingTitle = "";
+
+    private List<TodoItem>? tasks;
+
+    private string newTaskTitle = "";
+
+    
+    protected override async Task OnInitializedAsync()
+
+    {
+
+        await LoadTasks();
+
+    }
+
+    private async Task LoadTasks()
+
+    {
+
+        tasks = await Http.GetFromJsonAsync<List<TodoItem>>("Todo");
+
+    }
+
+    private async Task AddTask()
+
+    {
+
+        if (string.IsNullOrWhiteSpace(newTaskTitle)) return;
+
+        var newTask = new TodoItem { Title = newTaskTitle };
+
+        await Http.PostAsJsonAsync("Todo", newTask);
+
+        newTaskTitle = ""; 
+        await LoadTasks(); 
+    }
+
+    private async Task ToggleTask(TodoItem task)
+
+    {
+
+        task.IsCompleted = !task.IsCompleted;
+
+        await Http.PutAsJsonAsync($"Todo/{task.Id}", task);
+
+        await LoadTasks();
+
+    }
+
+    private async Task DeleteTask(int id)
+
+    {
+
+        await Http.DeleteAsync($"Todo/{id}");
+
+        await LoadTasks();
+
+    }
+
+    private void StartEdit(TodoItem task)
+
+    {
+
+        editingId = task.Id;
+
+        editingTitle = task.Title; 
+    }
+
+    private async Task SaveEdit(TodoItem task)
+
+    {
+
+        task.Title = editingTitle;
+
+        await Http.PutAsJsonAsync($"Todo/{task.Id}", task);
+
+        editingId = null;
+
+        await LoadTasks();
+
+    }
+
+}
+

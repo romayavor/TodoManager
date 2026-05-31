@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="Code2.Client/Code2.Client.csproj" Id="ce8760ac-8a9c-4139-b631-979e985bfaba" />
   <Project Path="Code2/Code2.csproj" />
+  <Project Path="Сode2.Tests/Сode2.Tests.csproj" Id="2229be0f-5820-43fd-b146-5fa137ad62b3" />
 </Solution>
